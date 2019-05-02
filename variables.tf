@@ -6,12 +6,19 @@ variable aws_secret_key {
   description = "AWS Secret Key"
 }
 
-variable s3_bucket_name {
-  description = "Default bucket"
-  default     = "renderqwerty"
+variable region {
+  description = "AWS region"
+  default     = "us-east-1"
 }
 
-variable s3_object_test {
-  description = "test image for s3 bucket"
-  default     = "files/test.txt"
+variable "bucket" {
+  default = "renderqwerty"
+}
+
+data "template_file" "s3_public_policy" {
+  template = "${file("files/policies/bucketpolicypermissions.json")}"
+
+  vars {
+    bucket_name = "${var.bucket}"
+  }
 }

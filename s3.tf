@@ -1,16 +1,10 @@
-resource "aws_s3_bucket" "renderqwerty" {
-  bucket = "${var.s3_bucket_name}"
-  acl    = "private"
+resource "aws_s3_bucket" "static_site" {
+  bucket = "${var.bucket}"
+  acl    = "public-read"
+  policy = "${data.template_file.s3_public_policy.rendered}"
 
-  tags = {
-    Name = "JBOF"
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
   }
-}
-
-resource "aws_s3_bucket_object" "object" {
-  bucket        = "${var.s3_bucket_name}"
-  source        = "${var.s3_object_test}"
-  storage_class = "INTELLIGENT_TIERING"
-  key           = "test.txt"
-  acl           = "public-read"
 }
